@@ -1,8 +1,13 @@
 import { Elysia } from 'elysia'
-// import routes from './lib/routes'
 import { html } from '@elysiajs/html'
 import consul from 'consul'
 import routes from './lib/routes'
+import {
+  serviceName,
+  serviceID,
+  serviceTags,
+  healthCheck,
+} from './lib/consulConfig'
 
 const app = new Elysia()
 
@@ -14,18 +19,6 @@ const consulClient = new consul({
   port: '4433',
   secure: true,
 })
-
-// Define service information
-const serviceName = 'beto-api'
-const serviceID = serviceName
-const serviceTags = ['api', 'bun']
-
-// Define health check endpoint
-const healthCheck = {
-  interval: '10s', // Check interval
-  timeout: '5s', // Check timeout
-  HTTP: `https://aec1-179-48-184-86.ngrok-free.app:443/api/health`, // Replace with your health check endpoint URL
-}
 
 // Register the service with Consul
 consulClient.agent.service
@@ -56,21 +49,26 @@ process.on('SIGINT', () => {
 app.use(html()).get(routes.home.path, () => routes.home.body)
 
 app.get(
-  '/api/service',
+  '/',
   () =>
-    `<html lang="en">
-    <head>
-      <title>Bun's API</title>
-    </head>
-    <body>
-      <h1>API Services</h1>
-      <p>Service: ${serviceName}</p>
-      <p>ID: ${serviceID}</p>
-      <p>Tags: ${serviceTags.join(', ')}</p>
-      <p><a href="/api">Home</a></p>
-    </body>
-  </html>`
+    `
+    <html lang="en">
+      <head>
+        <title>Bun's API</title>
+      </head>
+      <body>
+        <h1>Welcome to Bun's Service Register API</h1>
+        <p><a href="/api/health">Check Health</p>
+        <p><a href="/api/service">Check Service</p>
+        <p><a href="/api/publishers">Publishers</p>
+      </body>
+    </html>
+    `
 )
+
+app.get(routes.service.path, () => routes.service.body)
+
+app.get(routes.publishers.path, () => routes.publishers.body)
 
 app.get('/api/health', () => {
   return {
