@@ -6,7 +6,7 @@ const container = `
     display: flex;
     flex-direction: column;
     margin: 1rem;
-    min-width: 300px;
+    min-width: 500px;
     justify-content: center;
     justify-items: center;
     align-items: center;
@@ -51,7 +51,7 @@ const routes = {
       <body style="background: #ebd3b3">
       <div style="${container}">
         <h1>Publishers</h1>
-        <ul style="min-width: 500px">
+        <ul style="min-width: 400px">
         <li style="${listHeader}" id="list-header">
         <span>Publisher</span>
         <span>Country</span>
@@ -69,6 +69,9 @@ const routes = {
       </body>
     </html>
     `,
+    data: {
+      publishers,
+    },
   },
 
   service: {

@@ -8,11 +8,12 @@ import {
   serviceTags,
   healthCheck,
 } from './lib/consulConfig'
+import { publishersData } from './lib/publishersData'
 
-const app = new Elysia()
+export const app = new Elysia()
 
 const port = 3000 // You can change this port
-const ngrokHost = 'aec1-179-48-184-86.ngrok-free.app'
+const ngrokHost = '3603-179-48-184-86.ngrok-free.app'
 
 const consulClient = new consul({
   host: 'consul.jeffs.dev', // Replace with your Consul agent address
@@ -69,6 +70,7 @@ app.get(
 app.get(routes.service.path, () => routes.service.body)
 
 app.get(routes.publishers.path, () => routes.publishers.body)
+// app.get(routes.publishers.path, () => publishersData.publishers)
 
 app.get('/api/health', () => {
   return {
